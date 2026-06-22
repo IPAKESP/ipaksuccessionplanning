@@ -9,82 +9,152 @@
     
     <style>
         :root {
-            --bg-main: #f4f7f9; 
+            /* Light Mode Corporate Palette */
+            --bg-main: #f8f9fa; 
             --bg-card: #ffffff; 
-            --text-main: #1e293b;
-            --text-dim: #64748b; 
-            --border-color: #e2e8f0;
-            --primary: #0284c7;
-            --primary-hover: #0369a1;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --bg-surface: #f0f4f9;
+            --text-main: #1f1f1f;
+            --text-dim: #444746; 
+            --border-color: #e3e3e3;
+            --primary: #0b57d0;
+            --primary-hover: #0842a0;
+            --gradient-border: linear-gradient(135deg, #4285f4, #9b72cb, #ea4335, #fbbc04);
+            
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.1);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 50px; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; -webkit-font-smoothing: antialiased; }
         
         /* Header */
-        .header { text-align: center; padding: 40px 20px 30px; }
-        .header h1 { font-size: 34px; font-weight: 700; color: var(--text-main); }
-        .header p { color: var(--text-dim); margin-top: 5px; font-size: 16px; }
+        .header { text-align: center; padding: 60px 20px 40px; }
+        .header h1 { font-size: 40px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+        .header p { color: var(--text-dim); margin-top: 8px; font-size: 18px; font-weight: 400; }
         
         .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
-        #loader { text-align: center; color: var(--primary); padding: 50px; font-weight: 500; font-size: 18px; }
+        #loader { text-align: center; color: var(--primary); padding: 50px; font-weight: 500; font-size: 18px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        #loader::after { content: ""; width: 20px; height: 20px; border: 3px solid var(--border-color); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         
-        /* Tabs */
-        .tabs-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
-        .tab-btn { background: var(--bg-card); color: var(--text-dim); border: 1px solid var(--border-color); padding: 10px 24px; border-radius: 30px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.3s ease; box-shadow: var(--shadow-sm); }
-        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Tabs (Prompt Chips Style) */
+        .tabs-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 50px; }
+        .tab-btn { background: var(--bg-card); color: var(--text-dim); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 40px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); }
+        .tab-btn:hover { background: var(--bg-surface); color: var(--text-main); transform: translateY(-2px); }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(11, 87, 208, 0.2); }
         
         /* Cards Grid */
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-        .card-wrapper { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .card-wrapper:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
+        
+        /* Animated Gradient Card Wrapper */
+        .card-wrapper { 
+            position: relative; 
+            border-radius: 24px; 
+            padding: 2px; /* Padding creates the border thickness */
+            background: var(--bg-card); 
+            cursor: pointer; 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease; 
+            box-shadow: var(--shadow-sm); 
+            z-index: 1;
+        }
+        
+        /* Gradient Background Layer */
+        .card-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 24px;
+            background: var(--gradient-border);
+            background-size: 300% 300%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        .card-wrapper:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .card-wrapper:hover::before { opacity: 1; }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Inner Card Content */
+        .card-content { 
+            background: var(--bg-card); 
+            border-radius: 22px; /* Slightly less than wrapper to fit perfectly */
+            padding: 30px 25px; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+        }
         
         /* Profile Image Styles */
-        .card-avatar-container { width: 80px; height: 80px; margin-bottom: 15px; border-radius: 50%; overflow: hidden; background: #e0f2fe; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid #fff; }
+        .card-avatar-container { width: 88px; height: 88px; margin-bottom: 20px; border-radius: 50%; overflow: hidden; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); border: 3px solid #fff; }
         .profile-img { width: 100%; height: 100%; object-fit: cover; }
-        .fallback-initials { color: var(--primary); font-size: 24px; font-weight: 700; }
+        .fallback-initials { color: var(--primary); font-size: 26px; font-weight: 700; letter-spacing: 1px; }
         
-        .role-title { font-size: 18px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
-        .incumbent-name { font-size: 15px; color: var(--text-dim); background: #f1f5f9; padding: 4px 12px; border-radius: 20px; }
+        .role-title { font-size: 19px; font-weight: 600; color: var(--text-main); margin-bottom: 10px; line-height: 1.3; }
+        .incumbent-name { font-size: 15px; font-weight: 500; color: var(--text-dim); background: var(--bg-surface); padding: 6px 16px; border-radius: 20px; }
         
-        /* Modal Overlay */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity:0; visibility:hidden; transition: 0.3s; padding: 20px; }
+        /* Modal Overlay (Glassmorphism) */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(31, 31, 31, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity:0; visibility:hidden; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px; }
         .modal-overlay.active { opacity:1; visibility:visible; }
-        .modal-container { background: var(--bg-card); border-radius: 20px; width: 100%; max-width: 850px; max-height: 90vh; overflow-y: auto; padding: 35px; box-shadow: var(--shadow-lg); position: relative; }
         
-        .close-btn { position: absolute; top: 25px; right: 25px; background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: var(--text-dim); font-size: 16px; transition: 0.2s; display: flex; align-items: center; justify-content: center; z-index: 10; }
-        .close-btn:hover { background: #e2e8f0; color: var(--text-main); }
+        .modal-container { background: var(--bg-card); border-radius: 28px; width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; padding: 45px; box-shadow: var(--shadow-lg); position: relative; transform: scale(0.95); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid var(--border-color); }
+        .modal-overlay.active .modal-container { transform: scale(1); }
+        
+        .close-btn { position: absolute; top: 25px; right: 25px; background: var(--bg-surface); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; color: var(--text-dim); font-size: 18px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .close-btn:hover { background: #e3e3e3; color: var(--text-main); transform: rotate(90deg); }
 
         /* Modal Header */
-        .modal-top-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-right: 50px; }
-        .modal-header-title { font-size: 26px; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
-        .modal-badge { display: inline-block; background: #e0f2fe; color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        .modal-top-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-right: 50px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px; }
+        .modal-header-text { display: flex; flex-direction: column; gap: 8px; }
+        .modal-header-title { font-size: 32px; font-weight: 700; color: var(--text-main); line-height: 1.2; }
+        .modal-badge { display: inline-flex; align-items: center; background: var(--bg-surface); color: var(--primary); padding: 6px 16px; border-radius: 12px; font-size: 15px; font-weight: 600; width: fit-content; }
         
-        /* Modal Profile Image */
-        .modal-profile-container { width: 90px; height: 90px; border-radius: 50%; overflow: hidden; background: #e0f2fe; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); border: 3px solid #fff; flex-shrink: 0; }
+        .modal-profile-container { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); border: 4px solid #fff; flex-shrink: 0; }
         
-        .section-title { font-size: 18px; font-weight: 600; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin: 25px 0 20px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        .section-title span { background: var(--primary); width: 8px; height: 18px; border-radius: 4px; display: inline-block; }
+        .section-title { font-size: 20px; font-weight: 600; margin: 30px 0 20px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .section-title span { background: var(--gradient-border); width: 12px; height: 24px; border-radius: 6px; display: inline-block; background-size: 200% 200%; }
 
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-        .info-card { background: #f8fafc; border: 1px solid var(--border-color); padding: 16px; border-radius: 12px; }
-        .info-label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 500; }
-        .info-value { font-size: 15px; font-weight: 600; color: var(--text-main); word-break: break-word; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .info-card { background: var(--bg-main); border: 1px solid transparent; padding: 20px; border-radius: 16px; transition: border 0.3s; }
+        .info-card:hover { border-color: #d2e3fc; background: #fff; box-shadow: var(--shadow-sm); }
+        .info-label { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; }
+        .info-value { font-size: 16px; font-weight: 600; color: var(--text-main); word-break: break-word; line-height: 1.4; }
         
-        /* Successor Highlight */
-        .successor-section { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 25px; border-radius: 16px; margin-top: 30px; }
-        .successor-section .section-title { border-bottom-color: #bbf7d0; margin-top: 0; }
-        .successor-section .section-title span { background: #16a34a; }
-        .successor-section .info-card { background: #ffffff; border-color: #dcfce3; }
+        /* Successor Highlight Blocks */
+        .successor-section { border-radius: 20px; padding: 30px; margin-top: 35px; border: 1px solid; }
+        
+        /* Green - Successor 1 */
+        .succ-1 { background: #f0fdf4; border-color: #bbf7d0; }
+        .succ-1 .section-title span { background: #16a34a; }
+        .succ-1 .info-card { background: #ffffff; border-color: #dcfce3; }
+        .succ-1 .info-card:hover { border-color: #86efac; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.05); }
 
-        /* Scrollbar */
+        /* Blue - Successor 2 */
+        .succ-2 { background: #eff6ff; border-color: #bfdbfe; }
+        .succ-2 .section-title span { background: #3b82f6; }
+        .succ-2 .info-card { background: #ffffff; border-color: #dbeafe; }
+        .succ-2 .info-card:hover { border-color: #93c5fd; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.05); }
+
+        /* Red - No Successor */
+        .succ-none { background: #fef2f2; border-color: #fecaca; }
+        .succ-none .section-title span { background: #ef4444; }
+        .succ-none p { color: #991b1b; font-size: 16px; font-weight: 500; }
+
+        /* Scrollbar styling for modern look */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
     </style>
 </head>
 <body>
@@ -94,7 +164,7 @@
     </div>
     
     <div class="container">
-        <div id="loader">Fetching live data from IPAK...</div>
+        <div id="loader">Fetching live data...</div>
         <div class="tabs-container" id="tabs-container" style="display: none;"></div>
         <div class="cards-grid" id="grid-container"></div>
     </div>
@@ -113,7 +183,6 @@
         let globalData = [];
         let headerOccurrences = {};
 
-        // Automatic Live Update (Cache Buster)
         const noCacheUrl = sheetCsvUrl + "&t=" + new Date().getTime();
 
         Papa.parse(noCacheUrl, {
@@ -154,7 +223,7 @@
         function renderTabs() {
             const container = document.getElementById('tabs-container');
             container.style.display = 'flex';
-            container.innerHTML = ''; // Tabs ko duplicate hone se rokne ke liye
+            container.innerHTML = ''; 
             
             const depts = ["All", ...new Set(globalData.map(d => getVal(d, ['Department'])).filter(d => d !== 'N/A'))];
             if(depts.length <= 1) return;
@@ -194,11 +263,13 @@
                 
                 return `
                     <div class="card-wrapper" onclick="openModal(${globalData.indexOf(item)})">
-                        <div class="card-avatar-container">
-                            <img src="${photoUrl}" class="profile-img" alt="${incumbentName}" onerror="this.onerror=null; this.outerHTML='<span class=\\'fallback-initials\\'>${initials}</span>'">
+                        <div class="card-content">
+                            <div class="card-avatar-container">
+                                <img src="${photoUrl}" class="profile-img" alt="${incumbentName}" onerror="this.onerror=null; this.outerHTML='<span class=\\'fallback-initials\\'>${initials}</span>'">
+                            </div>
+                            <h3 class="role-title">${posTitle}</h3>
+                            <p class="incumbent-name">${incumbentName}</p>
                         </div>
-                        <h3 class="role-title">${posTitle}</h3>
-                        <p class="incumbent-name">${incumbentName}</p>
                     </div>
                 `;
             }).join('');
@@ -214,7 +285,7 @@
             
             let html = `
                 <div class="modal-top-section">
-                    <div>
+                    <div class="modal-header-text">
                         <h2 class="modal-header-title">${posTitle}</h2>
                         <div class="modal-badge">Incumbent: ${incumbentName}</div>
                     </div>
@@ -251,11 +322,11 @@
             if(successorName1 !== 'N/A') {
                 hasSuccessor = true;
                 html += `
-                <div class="successor-section">
-                    <div class="section-title"><span></span> Successor 1 Details</div>
+                <div class="successor-section succ-1">
+                    <div class="section-title" style="margin-top: 0;"><span></span> Successor 1 Details</div>
                     <div class="info-grid">
                         <div class="info-card"><div class="info-label">Successor Name</div><div class="info-value">${successorName1}</div></div>
-                        <div class="info-card"><div class="info-label">Successor Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 1', 'Successor Empoyee ID 1', 'Successor Employee ID', 'Employee ID_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 1', 'Successor Empoyee ID 1', 'Successor Employee ID', 'Employee ID_2'])}</div></div>
                         <div class="info-card"><div class="info-label">Current Position</div><div class="info-value">${getVal(item, ['Successor Current Position 1', 'Successor Current Position', 'Current Position_2'])}</div></div>
                         <div class="info-card"><div class="info-label">Readiness Level</div><div class="info-value">${getVal(item, ['Readiness Level 1', 'Successor Readiness Level 1', 'Readiness Level'])}</div></div>
                         <div class="info-card"><div class="info-label">Date of Joining</div><div class="info-value">${getVal(item, ['Successor Date of Joining 1', 'Successor Date of Joining', 'Date of Joining_2'])}</div></div>
@@ -274,20 +345,20 @@
             if(successorName2 !== 'N/A') {
                 hasSuccessor = true;
                 html += `
-                <div class="successor-section" style="background: #eff6ff; border-color: #bfdbfe; margin-top: 20px;">
-                    <div class="section-title" style="border-bottom-color: #bfdbfe; margin-top: 0;"><span style="background: #3b82f6;"></span> Successor 2 Details</div>
+                <div class="successor-section succ-2">
+                    <div class="section-title" style="margin-top: 0;"><span></span> Successor 2 Details</div>
                     <div class="info-grid">
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Successor Name</div><div class="info-value">${successorName2}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Successor Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 2', 'Successor Empoyee ID 2', 'Successor 2 Employee ID', 'Employee ID_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Current Position</div><div class="info-value">${getVal(item, ['Successor Current Position 2', 'Successor 2 Current Position', 'Current Position_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Readiness Level</div><div class="info-value">${getVal(item, ['Readiness Level 2', 'Successor Readiness Level 2', 'Readiness Level_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Date of Joining</div><div class="info-value">${getVal(item, ['Successor Date of Joining 2', 'Successor 2 Date of Joining', 'Date of Joining_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">IPAK Experience</div><div class="info-value">${getVal(item, ['Successor IPAK Experience 2', 'Successor 2 IPAK Experience', 'IPAK Experience_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Other Experience</div><div class="info-value">${getVal(item, ['Successor Other Experience 2', 'Successor 2 Other Experience', 'Other Experience_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Total Experience</div><div class="info-value">${getVal(item, ['Successor Total Experience 2', 'Successor 2 Total Experience', 'Total Experience_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Date of Birth</div><div class="info-value">${getVal(item, ['Successor Date of Birth 2', 'Successor 2 Date of Birth', 'Date of Birth_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Age</div><div class="info-value">${getVal(item, ['Successor Age 2', 'Successor 2 Age', 'Age_3'])}</div></div>
-                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Education</div><div class="info-value">${getVal(item, ['Successor Education 2', 'Successor 2 Education', 'Education_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Successor Name</div><div class="info-value">${successorName2}</div></div>
+                        <div class="info-card"><div class="info-label">Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 2', 'Successor Empoyee ID 2', 'Successor 2 Employee ID', 'Employee ID_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Current Position</div><div class="info-value">${getVal(item, ['Successor Current Position 2', 'Successor 2 Current Position', 'Current Position_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Readiness Level</div><div class="info-value">${getVal(item, ['Readiness Level 2', 'Successor Readiness Level 2', 'Readiness Level_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Date of Joining</div><div class="info-value">${getVal(item, ['Successor Date of Joining 2', 'Successor 2 Date of Joining', 'Date of Joining_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">IPAK Experience</div><div class="info-value">${getVal(item, ['Successor IPAK Experience 2', 'Successor 2 IPAK Experience', 'IPAK Experience_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Other Experience</div><div class="info-value">${getVal(item, ['Successor Other Experience 2', 'Successor 2 Other Experience', 'Other Experience_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Total Experience</div><div class="info-value">${getVal(item, ['Successor Total Experience 2', 'Successor 2 Total Experience', 'Total Experience_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Date of Birth</div><div class="info-value">${getVal(item, ['Successor Date of Birth 2', 'Successor 2 Date of Birth', 'Date of Birth_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Age</div><div class="info-value">${getVal(item, ['Successor Age 2', 'Successor 2 Age', 'Age_3'])}</div></div>
+                        <div class="info-card"><div class="info-label">Education</div><div class="info-value">${getVal(item, ['Successor Education 2', 'Successor 2 Education', 'Education_3'])}</div></div>
                     </div>
                 </div>
                 `;
@@ -295,9 +366,9 @@
 
             if(!hasSuccessor) {
                 html += `
-                <div class="successor-section" style="background: #fef2f2; border-color: #fecaca; margin-top: 30px;">
-                    <div class="section-title" style="border-bottom-color: #fecaca; margin-top: 0;"><span style="background: #ef4444;"></span> Successor Details</div>
-                    <p style="color: #991b1b; padding: 10px 0;">No successor currently mapped for this position.</p>
+                <div class="successor-section succ-none">
+                    <div class="section-title" style="margin-top: 0;"><span></span> Successor Details</div>
+                    <p>No successor currently mapped for this position.</p>
                 </div>
                 `;
             }
