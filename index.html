@@ -178,7 +178,7 @@
 
         function generatePhotoUrl(name) {
             if (!name || name === 'N/A' || name === 'Vacant') return "";
-            // Yeh space ko underscore se replace karta hai aur small letters mein karta hai (e.g. kamran_khan.jpg)
+            // Yeh space ko underscore se replace karta hai aur small letters mein karta hai
             const formattedName = name.trim().toLowerCase().replace(/\s+/g, '_');
             return `${githubImageBaseUrl}${formattedName}.jpg`;
         }
@@ -241,31 +241,64 @@
                 </div>
             `;
 
-            const successorName = getVal(item, ['Successor Name', 'Successor 1', 'Successor']);
+            // Successor 1 aur 2 ko nikalna (Alag headers ki possibilities ke sath taake koi null na aaye)
+            const successorName1 = getVal(item, ['Successor Name', 'Successor 1', 'Successor Name 1', 'Successor']);
+            const successorName2 = getVal(item, ['Successor Name 2', 'Successor 2']);
             
-            if(successorName !== 'N/A') {
+            let hasSuccessor = false;
+
+            // ---- Successor 1 Ka Block ----
+            if(successorName1 !== 'N/A') {
+                hasSuccessor = true;
                 html += `
                 <div class="successor-section">
-                    <div class="section-title"><span></span> Successor Details</div>
+                    <div class="section-title"><span></span> Successor 1 Details</div>
                     <div class="info-grid">
-                        <div class="info-card"><div class="info-label">Successor Name</div><div class="info-value">${successorName}</div></div>
-                        <div class="info-card"><div class="info-label">Successor Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID', 'Successor Empoyee ID', 'Employee ID_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Current Position</div><div class="info-value">${getVal(item, ['Successor Current Position', 'Current Position_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Readiness Level</div><div class="info-value">${getVal(item, ['Readiness Level', 'Successor Readiness Level'])}</div></div>
-                        <div class="info-card"><div class="info-label">Date of Joining</div><div class="info-value">${getVal(item, ['Successor Date of Joining', 'Date of Joining_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">IPAK Experience</div><div class="info-value">${getVal(item, ['Successor IPAK Experience', 'IPAK Experience_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Other Experience</div><div class="info-value">${getVal(item, ['Successor Other Experience', 'Other Experience_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Total Experience</div><div class="info-value">${getVal(item, ['Successor Total Experience', 'Total Experience_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Date of Birth</div><div class="info-value">${getVal(item, ['Successor Date of Birth', 'Date of Birth_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Age</div><div class="info-value">${getVal(item, ['Successor Age', 'Age_2'])}</div></div>
-                        <div class="info-card"><div class="info-label">Education</div><div class="info-value">${getVal(item, ['Successor Education', 'Education_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Successor Name</div><div class="info-value">${successorName1}</div></div>
+                        <div class="info-card"><div class="info-label">Successor Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID', 'Successor Employee ID 1', 'Employee ID_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Current Position</div><div class="info-value">${getVal(item, ['Successor Current Position', 'Successor Current Position 1', 'Current Position_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Readiness Level</div><div class="info-value">${getVal(item, ['Readiness Level', 'Successor Readiness Level', 'Readiness Level 1'])}</div></div>
+                        <div class="info-card"><div class="info-label">Date of Joining</div><div class="info-value">${getVal(item, ['Successor Date of Joining', 'Successor Date of Joining 1', 'Date of Joining_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">IPAK Experience</div><div class="info-value">${getVal(item, ['Successor IPAK Experience', 'Successor IPAK Experience 1', 'IPAK Experience_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Other Experience</div><div class="info-value">${getVal(item, ['Successor Other Experience', 'Successor Other Experience 1', 'Other Experience_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Total Experience</div><div class="info-value">${getVal(item, ['Successor Total Experience', 'Successor Total Experience 1', 'Total Experience_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Date of Birth</div><div class="info-value">${getVal(item, ['Successor Date of Birth', 'Successor Date of Birth 1', 'Date of Birth_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Age</div><div class="info-value">${getVal(item, ['Successor Age', 'Successor Age 1', 'Age_2'])}</div></div>
+                        <div class="info-card"><div class="info-label">Education</div><div class="info-value">${getVal(item, ['Successor Education', 'Successor Education 1', 'Education_2'])}</div></div>
                     </div>
                 </div>
                 `;
-            } else {
+            }
+
+            // ---- Successor 2 Ka Block ----
+            if(successorName2 !== 'N/A') {
+                hasSuccessor = true;
+                // Isey thora blue theme de di hai inline CSS mein taake alag se pehchan ho
                 html += `
-                <div class="successor-section" style="background: #fef2f2; border-color: #fecaca;">
-                    <div class="section-title" style="border-bottom-color: #fecaca;"><span style="background: #ef4444;"></span> Successor Details</div>
+                <div class="successor-section" style="background: #eff6ff; border-color: #bfdbfe; margin-top: 20px;">
+                    <div class="section-title" style="border-bottom-color: #bfdbfe; margin-top: 0;"><span style="background: #3b82f6;"></span> Successor 2 Details</div>
+                    <div class="info-grid">
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Successor Name</div><div class="info-value">${successorName2}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Successor Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 2', 'Successor 2 Employee ID', 'Employee ID_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Current Position</div><div class="info-value">${getVal(item, ['Successor Current Position 2', 'Successor 2 Current Position', 'Current Position_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Readiness Level</div><div class="info-value">${getVal(item, ['Readiness Level 2', 'Successor Readiness Level 2', 'Successor 2 Readiness Level', 'Readiness Level_2', 'Readiness Level_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Date of Joining</div><div class="info-value">${getVal(item, ['Successor Date of Joining 2', 'Successor 2 Date of Joining', 'Date of Joining_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">IPAK Experience</div><div class="info-value">${getVal(item, ['Successor IPAK Experience 2', 'Successor 2 IPAK Experience', 'IPAK Experience_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Other Experience</div><div class="info-value">${getVal(item, ['Successor Other Experience 2', 'Successor 2 Other Experience', 'Other Experience_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Total Experience</div><div class="info-value">${getVal(item, ['Successor Total Experience 2', 'Successor 2 Total Experience', 'Total Experience_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Date of Birth</div><div class="info-value">${getVal(item, ['Successor Date of Birth 2', 'Successor 2 Date of Birth', 'Date of Birth_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Age</div><div class="info-value">${getVal(item, ['Successor Age 2', 'Successor 2 Age', 'Age_3'])}</div></div>
+                        <div class="info-card" style="border-color: #dbeafe;"><div class="info-label">Education</div><div class="info-value">${getVal(item, ['Successor Education 2', 'Successor 2 Education', 'Education_3'])}</div></div>
+                    </div>
+                </div>
+                `;
+            }
+
+            // Agar koi bhi successor nahi hai
+            if(!hasSuccessor) {
+                html += `
+                <div class="successor-section" style="background: #fef2f2; border-color: #fecaca; margin-top: 30px;">
+                    <div class="section-title" style="border-bottom-color: #fecaca; margin-top: 0;"><span style="background: #ef4444;"></span> Successor Details</div>
                     <p style="color: #991b1b; padding: 10px 0;">No successor currently mapped for this position.</p>
                 </div>
                 `;
