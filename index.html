@@ -91,7 +91,6 @@
 
         /* Logos */
         .login-logo { height: 75px; margin-bottom: 20px; object-fit: contain; }
-        .dashboard-logo { height: 65px; margin-bottom: 15px; object-fit: contain; }
 
         .pin-title { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
         .pin-subtitle { font-size: 15px; color: var(--text-dim); text-align: center; line-height: 1.5; margin-bottom: 35px; }
@@ -160,9 +159,32 @@
         #dashboard-view { display: none; animation: fadeInDashboard 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes fadeInDashboard { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { text-align: center; padding: 60px 20px 40px; }
-        .header h1 { font-size: 40px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
-        .header p { color: var(--text-dim); margin-top: 8px; font-size: 18px; font-weight: 400; }
+        /* Updated Header Layout for Left Logo & Centered Text */
+        .header { 
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px 40px; 
+        }
+        .dashboard-logo { 
+            position: absolute;
+            left: 50px;
+            height: 70px; 
+            object-fit: contain; 
+        }
+        .header-text {
+            text-align: center;
+        }
+        .header-text h1 { font-size: 40px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+        .header-text p { color: var(--text-dim); margin-top: 8px; font-size: 18px; font-weight: 400; }
+        
+        /* Mobile responsiveness for header */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; padding: 40px 20px; }
+            .dashboard-logo { position: static; margin-bottom: 20px; height: 60px; }
+            .header-text h1 { font-size: 32px; }
+        }
         
         .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
         #loader { text-align: center; color: var(--primary); padding: 50px; font-weight: 500; font-size: 18px; display: flex; justify-content: center; align-items: center; gap: 10px; }
@@ -255,6 +277,7 @@
 </head>
 <body>
 
+    <!-- 1. Premium Login View -->
     <div id="login-view">
         <div class="ambient-bg">
             <div class="blob blob-1"></div>
@@ -280,11 +303,14 @@
         </div>
     </div>
 
+    <!-- 2. Main Dashboard View (Hidden until unlocked) -->
     <div id="dashboard-view">
         <div class="header">
             <img src="logo.png" alt="IPAK Logo" class="dashboard-logo">
-            <h1>IPAK Succession Planning</h1>
-            <p>Talent Mapping & Leadership Readiness Dashboard</p>
+            <div class="header-text">
+                <h1>IPAK Succession Planning</h1>
+                <p>Talent Mapping & Leadership Readiness Dashboard</p>
+            </div>
         </div>
         
         <div class="container">
@@ -294,6 +320,7 @@
         </div>
     </div>
 
+    <!-- Modal for details -->
     <div class="modal-overlay" id="detailModal" onclick="closeOnOverlay(event)">
         <div class="modal-container">
             <button class="close-btn" onclick="closeModal()">✕</button>
