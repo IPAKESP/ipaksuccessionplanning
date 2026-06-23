@@ -89,25 +89,9 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .icon-ring {
-            width: 80px; height: 80px;
-            background: var(--bg-surface);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: var(--shadow-sm);
-        }
-        /* Pulsing ring around icon */
-        .icon-ring::before {
-            content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px;
-            border-radius: 50%; border: 2px solid var(--primary);
-            animation: pulseRing 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-            opacity: 0;
-        }
-        @keyframes pulseRing { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 0; } }
-        
-        .icon-ring .icon { font-size: 36px; }
+        /* Logos */
+        .login-logo { height: 75px; margin-bottom: 20px; object-fit: contain; }
+        .dashboard-logo { height: 65px; margin-bottom: 15px; object-fit: contain; }
 
         .pin-title { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
         .pin-subtitle { font-size: 15px; color: var(--text-dim); text-align: center; line-height: 1.5; margin-bottom: 35px; }
@@ -148,7 +132,7 @@
 
         .pin-btn {
             width: 100%;
-            background: var(--text-main); /* Premium dark button */
+            background: var(--text-main); 
             color: #fff;
             border: none;
             padding: 16px;
@@ -244,6 +228,11 @@
         .info-value { font-size: 16px; font-weight: 600; color: var(--text-main); word-break: break-word; line-height: 1.4; }
         
         .successor-section { border-radius: 20px; padding: 30px; margin-top: 35px; border: 1px solid; }
+        
+        /* Successor Photo Header Layout */
+        .successor-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .successor-profile-container { width: 75px; height: 75px; border-radius: 50%; overflow: hidden; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); border: 3px solid #fff; flex-shrink: 0; }
+
         .succ-1 { background: #f0fdf4; border-color: #bbf7d0; }
         .succ-1 .section-title span { background: #16a34a; }
         .succ-1 .info-card { background: #ffffff; border-color: #dcfce3; }
@@ -266,7 +255,6 @@
 </head>
 <body>
 
-    <!-- 1. Premium Login View -->
     <div id="login-view">
         <div class="ambient-bg">
             <div class="blob blob-1"></div>
@@ -275,7 +263,7 @@
         </div>
         
         <div class="login-card" id="pin-card">
-            <div class="icon-ring"><div class="icon">🔒</div></div>
+            <img src="logo.png" alt="IPAK Logo" class="login-logo">
             <h2 class="pin-title">Secure Access</h2>
             <p class="pin-subtitle">Enter your authorization code to access the succession dashboard.</p>
             
@@ -292,9 +280,9 @@
         </div>
     </div>
 
-    <!-- 2. Main Dashboard View (Hidden until unlocked) -->
     <div id="dashboard-view">
         <div class="header">
+            <img src="logo.png" alt="IPAK Logo" class="dashboard-logo">
             <h1>IPAK Succession Planning</h1>
             <p>Talent Mapping & Leadership Readiness Dashboard</p>
         </div>
@@ -306,7 +294,6 @@
         </div>
     </div>
 
-    <!-- Modal for details -->
     <div class="modal-overlay" id="detailModal" onclick="closeOnOverlay(event)">
         <div class="modal-container">
             <button class="close-btn" onclick="closeModal()">✕</button>
@@ -542,9 +529,17 @@
 
             if(successorName1 !== 'N/A') {
                 hasSuccessor = true;
+                const succ1Initials = getInitials(successorName1);
+                const succ1PhotoUrl = generatePhotoUrl(successorName1);
+                
                 html += `
                 <div class="successor-section succ-1">
-                    <div class="section-title" style="margin-top: 0;"><span></span> Successor 1 Details</div>
+                    <div class="successor-top">
+                        <div class="section-title" style="margin-top: 0;"><span></span> Successor 1 Details</div>
+                        <div class="successor-profile-container">
+                            <img src="${succ1PhotoUrl}" class="profile-img" alt="${successorName1}" onerror="this.onerror=null; this.outerHTML='<span class=\\'fallback-initials\\'>${succ1Initials}</span>'">
+                        </div>
+                    </div>
                     <div class="info-grid">
                         <div class="info-card"><div class="info-label">Successor Name</div><div class="info-value">${successorName1}</div></div>
                         <div class="info-card"><div class="info-label">Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 1', 'Successor Empoyee ID 1', 'Successor Employee ID', 'Employee ID_2'])}</div></div>
@@ -564,9 +559,17 @@
 
             if(successorName2 !== 'N/A') {
                 hasSuccessor = true;
+                const succ2Initials = getInitials(successorName2);
+                const succ2PhotoUrl = generatePhotoUrl(successorName2);
+
                 html += `
                 <div class="successor-section succ-2">
-                    <div class="section-title" style="margin-top: 0;"><span></span> Successor 2 Details</div>
+                    <div class="successor-top">
+                        <div class="section-title" style="margin-top: 0;"><span></span> Successor 2 Details</div>
+                        <div class="successor-profile-container">
+                            <img src="${succ2PhotoUrl}" class="profile-img" alt="${successorName2}" onerror="this.onerror=null; this.outerHTML='<span class=\\'fallback-initials\\'>${succ2Initials}</span>'">
+                        </div>
+                    </div>
                     <div class="info-grid">
                         <div class="info-card"><div class="info-label">Successor Name</div><div class="info-value">${successorName2}</div></div>
                         <div class="info-card"><div class="info-label">Employee ID</div><div class="info-value">${getVal(item, ['Successor Employee ID 2', 'Successor Empoyee ID 2', 'Successor 2 Employee ID', 'Employee ID_3'])}</div></div>
