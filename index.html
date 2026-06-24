@@ -207,7 +207,7 @@
         .card-content { 
             background: var(--bg-card); 
             border-radius: 22px; 
-            padding: 40px 25px 30px; /* Top padding adjusted for badge */
+            padding: 30px 25px; 
             height: 100%; 
             display: flex; 
             flex-direction: column; 
@@ -216,55 +216,37 @@
             position: relative; 
         }
 
-        /* Green Accent for 'Yes' (Covered) */
+        /* Green Accent for 'Yes' */
         .card-wrapper.status-yes .card-content {
             border-top: 4px solid #10b981; 
         }
 
-        /* Red Accent for 'No' (At Risk) */
+        /* Red Accent for 'No' */
         .card-wrapper.status-no .card-content {
             border-top: 4px solid #ef4444; 
         }
 
-        /* Status Badge Styling */
+        /* Status Dot Styling */
         .status-indicator {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 5px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Green Badge Theme */
-        .card-wrapper.status-yes .status-indicator {
-            background: #ecfdf5;
-            color: #059669;
-            border: 1px solid #a7f3d0;
-        }
-
-        /* Red Badge Theme */
-        .card-wrapper.status-no .status-indicator {
-            background: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-
-        /* Small Animated Dot inside Badge */
-        .status-dot {
-            width: 6px;
-            height: 6px;
+            top: 20px;
+            right: 20px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
         }
-        .card-wrapper.status-yes .status-dot { background: #10b981; }
-        .card-wrapper.status-no .status-dot { background: #ef4444; }
 
+        /* Green Dot Theme */
+        .card-wrapper.status-yes .status-indicator {
+            background: #10b981;
+            box-shadow: 0 0 0 3px #ecfdf5;
+        }
+
+        /* Red Dot Theme */
+        .card-wrapper.status-no .status-indicator {
+            background: #ef4444;
+            box-shadow: 0 0 0 3px #fef2f2;
+        }
 
         /* -------------------------
            Modal Styles 
@@ -538,26 +520,20 @@
                 const availability = availabilityRaw.toLowerCase().trim();
                 
                 let statusClass = '';
-                let statusText = '';
                 
                 // Agar Successor hai (Yes)
                 if (availability === 'yes' || availability === 'y') {
                     statusClass = 'status-yes';
-                    statusText = 'Covered';
                 } 
                 // Agar Successor nahi hai (No / N/A)
                 else {
                     statusClass = 'status-no';
-                    statusText = 'At Risk';
                 }
 
                 return `
                     <div class="card-wrapper ${statusClass}" onclick="openModal(${globalData.indexOf(item)})">
                         <div class="card-content">
-                            <div class="status-indicator">
-                                <span class="status-dot"></span>
-                                ${statusText}
-                            </div>
+                            <div class="status-indicator"></div>
                             <div class="card-avatar-container">
                                 <img src="${photoUrl}" class="profile-img" alt="${incumbentName}" onerror="this.onerror=null; this.outerHTML='<span class=\\'fallback-initials\\'>${initials}</span>'">
                             </div>
