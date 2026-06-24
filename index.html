@@ -226,6 +226,11 @@
             border-top: 4px solid #ef4444; 
         }
 
+        /* Gray Accent for Specific Roles */
+        .card-wrapper.status-gray .card-content {
+            border-top: 4px solid #9ca3af; 
+        }
+
         /* Status Dot Styling */
         .status-indicator {
             position: absolute;
@@ -248,8 +253,14 @@
             box-shadow: 0 0 0 3px #fef2f2;
         }
 
+        /* Gray Dot Theme */
+        .card-wrapper.status-gray .status-indicator {
+            background: #9ca3af;
+            box-shadow: 0 0 0 3px #f3f4f6;
+        }
+
         /* -------------------------
-           Modal Styles 
+            Modal Styles 
         -------------------------- */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(31, 31, 31, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity:0; visibility:hidden; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px; }
         .modal-overlay.active { opacity:1; visibility:visible; }
@@ -509,6 +520,15 @@
 
         function renderGrid(data) {
             const grid = document.getElementById('grid-container');
+            
+            // Define positions that should always be gray
+            const grayPositions = [
+                "head raw material", 
+                "chief strategy officer", 
+                "chief financial officer", 
+                "head grc"
+            ];
+
             grid.innerHTML = data.map((item, index) => {
                 const posTitle = getVal(item, ['Position Title', 'Position']);
                 const incumbentName = getVal(item, ['Incumbent Name', 'Incumbent']);
@@ -521,8 +541,12 @@
                 
                 let statusClass = '';
                 
+                // Check if the position title matches our gray list (case-insensitive check)
+                if (grayPositions.includes(posTitle.toLowerCase().trim())) {
+                    statusClass = 'status-gray';
+                }
                 // Agar Successor hai (Yes)
-                if (availability === 'yes' || availability === 'y') {
+                else if (availability === 'yes' || availability === 'y') {
                     statusClass = 'status-yes';
                 } 
                 // Agar Successor nahi hai (No / N/A)
