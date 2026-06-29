@@ -521,14 +521,6 @@
         function renderGrid(data) {
             const grid = document.getElementById('grid-container');
             
-            // Define positions that should always be gray
-            const grayPositions = [
-                "head raw material", 
-                "chief strategy officer", 
-                "chief financial officer", 
-                "head grc"
-            ];
-
             grid.innerHTML = data.map((item, index) => {
                 const posTitle = getVal(item, ['Position Title', 'Position']);
                 const incumbentName = getVal(item, ['Incumbent Name', 'Incumbent']);
@@ -541,12 +533,8 @@
                 
                 let statusClass = '';
                 
-                // Check if the position title matches our gray list (case-insensitive check)
-                if (grayPositions.includes(posTitle.toLowerCase().trim())) {
-                    statusClass = 'status-gray';
-                }
                 // Agar Successor hai (Yes)
-                else if (availability === 'yes' || availability === 'y') {
+                if (availability === 'yes' || availability === 'y') {
                     statusClass = 'status-yes';
                 } 
                 // Agar Successor nahi hai (No / N/A)
